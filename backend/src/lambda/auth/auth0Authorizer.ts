@@ -59,12 +59,14 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const jwt: Jwt = decode(token, { complete: true }) as Jwt
 
   // Implement token verification
-  // You should implement it similarly to how it was implemented for the exercise for the lesson 5
-  // You can read more about how to do this here: https://auth0.com/blog/navigating-rs256-and-jwks/
-  
   const remoteAuth = await Axios.get(jwksUrl)
-  return verify(token,remoteAuth.data,{algorithms:[jwt.header.alg]}) as JwtPayload
-  
+  const pemData = remoteAuth['data']['keys'][0]['x5c'][0];
+  const  certi = `-----BEGIN CERTIFICATE-----\n${pemData}\n-----END CERTIFICATE-----`;
+
+  return verify(
+    token,
+    certi,
+    { algorithms: [jwt.header.alg] }) as JwtPayload
 }
 
 function getToken(authHeader: string): string {
