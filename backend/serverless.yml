@@ -6,6 +6,9 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-reqvalidator-plugin
   - serverless-aws-documentation
+  - serverless-plugin-tracing
+  - serverless-dynamodb-local
+  - serverless-offline
 
 package:
   individually: true
@@ -44,7 +47,18 @@ custom:
       - name: TodoRequestDelete
         contentType: application/json
         schema: ${file(src/requests/delete-todo-request.json)}
-    
+
+  serverless-offline:
+    port: 3003
+
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    stages: # Add this section of the config
+      - dev
+      
 functions:
 
   Auth:
