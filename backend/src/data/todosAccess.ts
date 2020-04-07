@@ -42,36 +42,37 @@ export class TodosAccess {
     return todo
   }
 
-  async getTodoBy(id:string) : Promise<TodoItem>{
-    const result =  await this.docClient.query({
-        TableName : this.todosTable,
-        KeyConditionExpression: 'todoId = :todoId',
-        ExpressionAttributeValues: {
-            ':todoId': id
-        }
-    }).promise()
+  async getTodoBy(todoId:string) : Promise<TodoItem>{
+    const result = await this.docClient.get({
+          TableName: this.todosTable,
+          Key: {
+              todoId
+          }
+      }).promise();
 
-    if(result.Count!=0){
-      return result[0]
-    }
+      console.log("Result is :", result)
+      console.log("Result  Item is :", result.Item)
 
-    return undefined
+    return result.Item as TodoItem
   }
 
   async deleteTodo(todoId: string, userId: string): Promise<TodoDeleteResponse> {
 
     const item = await this.getTodoBy(todoId)
 
+    if(!item) return {status: 404 ,message: "Item not Present"} as TodoDeleteResponse
+
     if(item.userId !== userId){
+      console.log("Requester id:"+userId+" is different from item user id:"+item.userId)
       return {status: 401 ,message: "Not Authorised"} as TodoDeleteResponse
     }
 
     const res = await this.docClient.delete({
       TableName : this.todosTable,
       Key:{
-              "todoId":todoId
+              todoId
           }
-    })
+    }).promise()
 
     console.log("Deleted:",res)
 
