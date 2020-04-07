@@ -150,14 +150,14 @@ functions:
           documentation:
             summary: delete existing todo
             description: delete existing todo
-            requestModels:
-              'application/json': TodoRequestDelete
+
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:Query
           - dynamodb:GetItem
           - dynamodb:PutItem
+          - dynamodb:DeleteItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
           
 
