@@ -134,7 +134,7 @@ functions:
         Action:
           - dynamodb:Query
           - dynamodb:GetItem
-          - dynamodb:PutItem
+          - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
           
   # Function delete the existing todo for the user
