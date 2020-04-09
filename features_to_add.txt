@@ -1,0 +1,23 @@
+TODO: CI Integeration setup 
+TODO: Testing (Unit and Integeration)
+TODO: Elastic Search(For Logs storage)
+TODO: Website Hosting EC2 (If required)
+TODO: Metrics (Calls and speed param and geo param)
+TODO: Reminder feature SNS (When todo completed mail for progress)
+TODO: Blue/Green Deployment
+TODO: Offline Support (optional)
+TODO: CloudWatch Event to ElasticSearch (flow)
+TODO: s3 Event notification (event when new Image is been stored)
+TODO: Database Stream for new entry -> email (flow)
+TODO: After CI success run CD with AWS credentials (CD)
+TODO: API Stages atleast 2 Stages (prod and dev)
+TODO: Pagination Support (4 items at a time)
+TODO: Image API (optional)
+TODO: WebSocket (optional)
+TODO: Full-text Search (search feature for todo)
+TODO: Canary Deployment
+TODO: CloudFront for client accessing
+TODO: SQS
+TODO: RDS
+TODO: Elastic BeanStack
+TODO: Sorting feature
