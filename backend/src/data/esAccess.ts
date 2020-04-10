@@ -3,8 +3,7 @@ import * as httpAwsEs from 'http-aws-es'
 
 import { createLogger } from '../utils/logger'
 import { LogNewTodoEventInES } from '../requests/LogNewTodoEventInES'
-import { Bool } from 'aws-sdk/clients/clouddirectory'
-import { TodoItem } from '../models/TodoItem'
+import { ElasticSearchLogCategory } from '../models/ElasticSearchLogCategory'
 
 const logger = createLogger('esLogger')
 const esHost = process.env.ES_ENDPOINT
@@ -60,13 +59,19 @@ export class ESAccess {
         logIndex = ElasticSearchLogCategory.NEW_TODO
       }
 
+      logger.info("Index is:",logIndex)
+      logger.info("Query:",query)
+      if(query.length==0){
+        query="part"
+      }
+
       return await this.es.search({
         index: logIndex,
         type: 'todos',
         body:{
           query:{
-            regexp:{
-              "name": query+".*"
+            match:{
+              "todoTitle": query
             }
           }
         }
