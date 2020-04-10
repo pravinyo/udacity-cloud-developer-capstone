@@ -5,10 +5,14 @@
     "properties": {
       "query": {
         "type": "string"
+      },
+      "on": {
+        "type": "string"
       }
     },
     "required": [
-      "query"
+      "query",
+      "on"
     ],
     "additionalProperties": false
   }
