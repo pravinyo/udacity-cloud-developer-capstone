@@ -8,14 +8,16 @@ import { searchNewTodoInES } from '../../domain/elasticSearch'
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   
-  const query:string = event.pathParameters.query
+  const request = JSON.parse(event.body)
   
   /*
   const authorization = event.headers.Authorization
   const split = authorization.split(' ')
   const jwtToken = split[1]
 */
-  const results = await searchNewTodoInES(query)
+  console.log("Received request",request)
+  console.log("Query is :",request.query)
+  const results = await searchNewTodoInES(request.query)
 
   return {
     statusCode: 200,
