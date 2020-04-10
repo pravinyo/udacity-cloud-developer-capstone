@@ -1,6 +1,7 @@
 import { TodoItem } from "../models/TodoItem";
 import { ESAccess } from "../data/esAccess";
 import { ElasticSearchLogCategory } from "../models/ElasticSearchLogCategory";
+import { parseUserId } from "../auth/utils";
 
 const esAccess = new ESAccess()
 
@@ -46,9 +47,12 @@ export async function logDoneTodoItemInES(
    * @returns any
    */
 export async function searchDoneTodoInES(
-    query:string
+    query:string,
+    jwtToken:string
   ):Promise<any>{
-      return await esAccess.searchDoneTodo(query)
+    const user = parseUserId(jwtToken)
+    
+    return await esAccess.searchDoneTodo(query,user)
   }
 
     /**
@@ -58,7 +62,10 @@ export async function searchDoneTodoInES(
    * @returns any
    */
 export async function searchNewTodoInES(
-    query:string
+    query:string,
+    jwtToken:string
   ):Promise<any>{
-      return await esAccess.searchNewTodo(query)
+      const user = parseUserId(jwtToken)
+
+      return await esAccess.searchNewTodo(query,user)
   }
