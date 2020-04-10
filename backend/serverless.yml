@@ -47,6 +47,9 @@ custom:
       - name: TodoRequestDelete
         contentType: application/json
         schema: ${file(src/requests/delete-todo-request.json)}
+      - name: TodoRequestSearch
+        contentType: application/json
+        schema: ${file(src/requests/search-todo-request.json)}
 
   serverless-offline:
     port: 3003
@@ -191,6 +194,23 @@ functions:
       - stream:
           type: dynamodb
           arn: !GetAtt TodoDynamoDBTable.StreamArn
+  
+  QueryTodo:
+    environment:
+      ES_ENDPOINT: !GetAtt TodoSearch.DomainEndpoint
+    handler: src/lambda/elasticSearch/searchTodo.handler
+    events:
+      - http:
+          method: post
+          path: todos/search/
+          cors: true
+          authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Query todos
+            description: Query todos based on startwith logic
+            requestModels:
+              'application/json': TodoRequestSearch
 
 resources:
   Resources:
