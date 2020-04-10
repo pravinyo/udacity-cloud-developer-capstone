@@ -48,36 +48,29 @@ export class ESAccess {
      * 
      * @returns array of todoItem
      */
-    async searchNewTodo(query:string):Promise<any> {
+    async searchNewTodo(query:string,userId:String):Promise<any> {
       logger.info('Search ES for : ', query)
+   
+      const param = {
+        "multi_match": {
+          "query": query+ " "+userId,
+          "type":       "cross_fields",
+          "fields": ["todoTitle","userid"],
+          "operator":   "and"
+        }
+      }
 
-      logger.info("Query for new todo list:"+query)
-    
+      logger.info("Query for new todo list:",param)
+
       return await this.es.search({
         index: 'todos-index',
         type: 'todos',
         body:{
-          "query": {
-            "simple_query_string": {
-              "query": query,
-              "fields": ["todoTitle"]
-            }
+          "query": param
           }
-        }
       })
     }
 
-    /**
-     * "query": {
-    "multi_match": {
-      "query": "part google-oauth2|112567431979117533864",
-      "type":       "cross_fields",
-      "fields": ["todoTitle","userid"],
-      "operator":   "and"
-    }
-  }
-
-     */
 
     /**
      * Search log entry in elasticSearch for todo items
@@ -87,21 +80,25 @@ export class ESAccess {
      * 
      * @returns array of todoItem
      */
-    async searchDoneTodo(query:string):Promise<any> {
+    async searchDoneTodo(query:string,userId:String):Promise<any> {
       logger.info('Search ES for : ', query)
 
-      logger.info("Query for completed todo list:"+query)
+      const param = {
+        "multi_match": {
+          "query": query+ " "+userId,
+          "type":       "cross_fields",
+          "fields": ["todoTitle","userid"],
+          "operator":   "and"
+        }
+      }
+
+      logger.info("Query for completed todo list:",param)
     
       return await this.es.search({
         index: 'done-index',
         type: 'todos',
         body:{
-          "query": {
-            "simple_query_string": {
-              "query": query,
-              "fields": ["todoTitle"]
-            }
-          }
+          "query": param
         }
       })
     }
