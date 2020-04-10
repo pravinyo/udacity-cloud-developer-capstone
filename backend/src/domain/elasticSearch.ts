@@ -1,5 +1,6 @@
 import { TodoItem } from "../models/TodoItem";
 import { ESAccess } from "../data/esAccess";
+import { ElasticSearchLogCategory } from "../models/ElasticSearchLogCategory";
 
 const esAccess = new ESAccess()
 
