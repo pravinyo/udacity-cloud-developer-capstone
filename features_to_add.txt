@@ -12,9 +12,7 @@ TODO: Database Stream for new entry -> email (flow)
 TODO: After CI success run CD with AWS credentials (CD)
 TODO: API Stages atleast 2 Stages (prod and dev)
 TODO: Pagination Support (4 items at a time)
-TODO: Image API (optional)
-TODO: WebSocket (optional)
-TODO: Full-text Search (search feature for todo)
+-TODO: Full-text Search (search feature for todo)
 TODO: Canary Deployment
 TODO: CloudFront for client accessing
 TODO: SQS
