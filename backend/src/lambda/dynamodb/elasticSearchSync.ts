@@ -22,7 +22,7 @@ export const handler: DynamoDBStreamHandler = async (event: DynamoDBStreamEvent)
     const newItem = record.dynamodb.NewImage
 
     const todoId = newItem.todoId.S
-    const userid = newItem.userid.S
+    const userid = newItem.userId.S
     const created = newItem.createdAt.S
     const name = newItem.name.S
     const attachment = newItem.attachmentUrl.S
