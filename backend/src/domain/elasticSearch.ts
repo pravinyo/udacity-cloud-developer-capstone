@@ -48,7 +48,7 @@ export async function logDoneTodoItemInES(
 export async function searchDoneTodoInES(
     query:string
   ):Promise<any>{
-      return await esAccess.searchCompletedTodo(query,ElasticSearchLogCategory.DONE_TODO)
+      return await esAccess.searchDoneTodo(query)
   }
 
     /**
@@ -60,5 +60,5 @@ export async function searchDoneTodoInES(
 export async function searchNewTodoInES(
     query:string
   ):Promise<any>{
-      return await esAccess.searchCompletedTodo(query,ElasticSearchLogCategory.NEW_TODO)
+      return await esAccess.searchNewTodo(query)
   }
