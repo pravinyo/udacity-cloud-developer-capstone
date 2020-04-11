@@ -1,4 +1,5 @@
 # Serverless TODO Application
+[![Build Status](https://travis-ci.com/pravinyo/udacity-cloud-developer-capstone.svg?branch=master)](https://travis-ci.com/pravinyo/udacity-cloud-developer-capstone)
 
 A simple TODOs Application build using AWS serverless stack for managing client request. It is created as part of Udacity Cloud Developer Nanodegree Program. 
 
