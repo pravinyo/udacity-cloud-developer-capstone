@@ -1,21 +1,18 @@
-import * as AWS  from 'aws-sdk'
-import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-
-const XAWS = AWSXRay.captureAWS(AWS)
 
 import { TodoItem } from '../models/TodoItem'
 import { TodoDeleteResponse } from '../models/TodoDeleteResponse'
 import { TodoUpdateResponse } from '../models/TodoUpdateResponse'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { createLogger } from '../utils/logger'
+import { ITodoAccess } from '../domain/ITodoAccess'
 
 const logger = createLogger('todoAccess')
 
-export class TodosAccess {
+export class TodosAccess implements ITodoAccess {
 
   constructor(
-    private readonly docClient: DocumentClient = createDynamoDBClient(),
+    private readonly docClient: DocumentClient,
     private readonly todosTable = process.env.TODOS_TABLE,
     private readonly userIdIndex = process.env.USER_ID_INDEX) {
   }
@@ -186,21 +183,4 @@ export class TodosAccess {
     return false
   }
   
-}
-
- /**
-   * Helpher function which checks running environment and create appropriate instances for docClient
-   * 
-   * @returns Dynamodb Document Client instance
-   */
-function createDynamoDBClient() {
-  if (process.env.IS_OFFLINE) {
-    console.log('Creating a local DynamoDB instance')
-    return new XAWS.DynamoDB.DocumentClient({
-      region: 'localhost',
-      endpoint: 'http://localhost:8000'
-    })
-  }
-
-  return new XAWS.DynamoDB.DocumentClient()
 }
