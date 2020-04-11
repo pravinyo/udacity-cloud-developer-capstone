@@ -1,14 +1,14 @@
 import { createLogger } from '../utils/logger'
 import { LogNewTodoEventInES } from '../requests/LogNewTodoEventInES'
-import { createElasticSearchClient } from './createElasticSearchClient'
 import { ElasticSearchLogCategory } from '../models/ElasticSearchLogCategory'
+import { Client } from 'elasticsearch'
 
 const logger = createLogger('esLogger')
 
 export class ESAccess {
 
     constructor(
-      private readonly es = createElasticSearchClient()) {
+      private readonly es:Client) {
     }
   
     /**
