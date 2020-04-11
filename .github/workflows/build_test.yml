@@ -20,8 +20,7 @@ jobs:
         
     - name: Install dependencies
       working-directory: ${{env.working-dir-backend}}
-      run: |
-        npm install
+      run: cd ./backend && npm install
       
     - name: Run Unit Test
       working-directory: ${{env.working-dir-backend}}
