@@ -1,5 +1,5 @@
 TODO: CI Integeration setup 
-TODO: Testing (Unit and Integeration)
+-TODO: Testing (Unit and Integeration)
 -TODO: Elastic Search(For Logs storage)
 TODO: Website Hosting EC2 (If required)
 TODO: Metrics (Calls and speed param and geo param)
