@@ -2,7 +2,6 @@
 import { TodosAccess } from "../data/todosAccess"
 import { TodoItem } from "../models/TodoItem"
 import { CreateTodoRequest } from "../requests/CreateTodoRequest"
-import { parseUserId } from '../auth/utils'
 import { TodoDeleteResponse } from '../models/TodoDeleteResponse'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { TodoUpdateResponse } from '../models/TodoUpdateResponse'
@@ -20,10 +19,7 @@ const todoInteractor = new TodoInteractor(new TodosAccess(createDynamoDBClient()
    * @returns Array list of todos 
    */
 export async function getAllTodos(jwtToken: string): Promise<TodoItem[]> {
-
-  const userId = parseUserId(jwtToken)
-
-  return todoInteractor.getAllTodos(userId)
+  return todoInteractor.getAllTodos(jwtToken)
 }
 
  /**
