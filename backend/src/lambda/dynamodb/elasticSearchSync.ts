@@ -2,6 +2,7 @@ import { DynamoDBStreamEvent, DynamoDBStreamHandler } from 'aws-lambda'
 import 'source-map-support/register'
 import { TodoItem } from '../../models/TodoItem'
 import { logNewTodoItemInES, logDoneTodoItemInES } from '../../domain/elasticSearch'
+import { notifyForNewTodo, notifyForDoneTodo } from '../../domain/snsNotification'
 
 export const handler: DynamoDBStreamHandler = async (event: DynamoDBStreamEvent) => {
   console.log('Processing events batch from DynamoDB', JSON.stringify(event))
@@ -22,6 +23,7 @@ export const handler: DynamoDBStreamHandler = async (event: DynamoDBStreamEvent)
       }
 
       await logNewTodoItemInES(todo)
+      await notifyForNewTodo(todo.name)
 
     }else if(record.eventName == 'MODIFY'){
       const newItem = record.dynamodb.NewImage
@@ -38,6 +40,7 @@ export const handler: DynamoDBStreamHandler = async (event: DynamoDBStreamEvent)
       
       if(todo.done){
         await logDoneTodoItemInES(todo)
+        await notifyForDoneTodo(todo.name)
       }
     }
   }
