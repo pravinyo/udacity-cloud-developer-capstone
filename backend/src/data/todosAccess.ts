@@ -5,10 +5,11 @@ import { TodoDeleteResponse } from '../models/TodoDeleteResponse'
 import { TodoUpdateResponse } from '../models/TodoUpdateResponse'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { createLogger } from '../utils/logger'
+import { ITodoAccess } from '../domain/ITodoAccess'
 
 const logger = createLogger('todoAccess')
 
-export class TodosAccess {
+export class TodosAccess implements ITodoAccess {
 
   constructor(
     private readonly docClient: DocumentClient,
