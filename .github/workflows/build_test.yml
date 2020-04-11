@@ -1,16 +1,15 @@
 
-name: Node.js CI
+name: Unit testing Backend Domain Logic
 
 on: [push]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [10.x, 12.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -18,11 +17,17 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-        working-directory: ${{env.working-dir-backend}}
-    - run: npm ci
+        
+    - name: Install dependencies
       working-directory: ${{env.working-dir-backend}}
-    - run: npm run test
+      run: |
+        npm install
+      
+    - name: Run Unit Test
       working-directory: ${{env.working-dir-backend}}
+      run: |
+        npm run test
+      
       env:
         CI: true
         working-dir-backend : ./backend
