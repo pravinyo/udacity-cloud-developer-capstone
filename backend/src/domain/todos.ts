@@ -6,7 +6,7 @@ import { TodoDeleteResponse } from '../models/TodoDeleteResponse'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { TodoUpdateResponse } from '../models/TodoUpdateResponse'
 import { TodoInteractor } from '../interactor/todosInteractor'
-import { createDynamoDBClient } from '../data/createDynamoDBClient'
+import { createDynamoDBClient } from '../data/dependencyInjector'
 
 const bucketName = process.env.IMAGES_S3_BUCKET
 const todoInteractor = new TodoInteractor(new TodosAccess(createDynamoDBClient()),bucketName)
