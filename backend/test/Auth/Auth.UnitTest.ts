@@ -12,12 +12,12 @@ describe('parse userId', () => {
       expect(userId).to.equal(`google-oauth2|112567431979117533864`);
     });
   
-    it('should return null', () => {
+    it('should return null for empty token', () => {
         const userId = parseUserId(token2)
         expect(userId).to.equal(null);
     });
 
-    it('should return null', () => {
+    it('should return null for malformed token', () => {
         const userId = parseUserId(token3)
         expect(userId).to.equal(null);
     });
