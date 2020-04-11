@@ -2,8 +2,9 @@ import { TodoItem } from "../models/TodoItem";
 import { ESAccess } from "../data/esAccess";
 import { ElasticSearchLogCategory } from "../models/ElasticSearchLogCategory";
 import { parseUserId } from "../auth/utils";
+import { createElasticSearchClient } from "../data/createElasticSearchClient";
 
-const esAccess = new ESAccess()
+const esAccess = new ESAccess(createElasticSearchClient())
 
 /**
    *  Wrapper function to create log of new TodoItem provided by the user.

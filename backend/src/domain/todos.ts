@@ -1,15 +1,15 @@
-import * as uuid from 'uuid'
 
 import { TodosAccess } from "../data/todosAccess"
 import { TodoItem } from "../models/TodoItem"
 import { CreateTodoRequest } from "../requests/CreateTodoRequest"
-import { parseUserId } from '../auth/utils'
 import { TodoDeleteResponse } from '../models/TodoDeleteResponse'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { TodoUpdateResponse } from '../models/TodoUpdateResponse'
+import { TodoInteractor } from '../interactor/todosInteractor'
+import { createDynamoDBClient } from '../data/createDynamoDBClient'
 
-const todoAccess = new TodosAccess()
 const bucketName = process.env.IMAGES_S3_BUCKET
+const todoInteractor = new TodoInteractor(new TodosAccess(createDynamoDBClient()),bucketName)
 
  /**
    * Helpher function to get all todos for provided Token. It extracts the userId and uses it to get right 
@@ -19,10 +19,7 @@ const bucketName = process.env.IMAGES_S3_BUCKET
    * @returns Array list of todos 
    */
 export async function getAllTodos(jwtToken: string): Promise<TodoItem[]> {
-
-  const userId = parseUserId(jwtToken)
-
-  return todoAccess.getAllTodos(userId)
+  return todoInteractor.getAllTodos(jwtToken)
 }
 
  /**
@@ -39,18 +36,7 @@ export async function createTodo(
   jwtToken: string,
 ): Promise<TodoItem> {
 
-  const itemId = uuid.v4()
-  const userId = parseUserId(jwtToken)
-
-  return await todoAccess.createTodo({
-    todoId: itemId,
-    userId: userId,
-    name: createTodoRequest.name,
-    createdAt: new Date().toISOString(),
-    dueDate: createTodoRequest.dueDate,
-    done:false,//default behavior
-    attachmentUrl: `https://${bucketName}.s3.amazonaws.com/${itemId}`
-  })
+  return await todoInteractor.createTodo(createTodoRequest,jwtToken)
 }
 
  /**
@@ -67,9 +53,7 @@ export async function deleteTodo(
   jwtToken: string
 ): Promise<TodoDeleteResponse> {
 
-  const userId = parseUserId(jwtToken)
-
-  return await todoAccess.deleteTodo(todoId,userId)
+  return await todoInteractor.deleteTodo(todoId,jwtToken)
 }
 
  /**
@@ -89,9 +73,7 @@ export async function updateTodo(
   jwtToken:string
 ): Promise<TodoUpdateResponse> {
 
-  const userId = parseUserId(jwtToken)
-
-  return await todoAccess.updateTodo(todoId,request,userId)
+  return await todoInteractor.updateTodo(todoId,request,jwtToken)
 }
 
  /**
@@ -108,7 +90,5 @@ export async function isTodoExsts(
   jwtToken:string
 ): Promise<Boolean> {
 
-  const userId = parseUserId(jwtToken)
-
-  return await todoAccess.todoExists(todoId,userId)
+  return await todoInteractor.isTodoExsts(todoId,jwtToken)
 }

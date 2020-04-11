@@ -2,6 +2,9 @@
   "name": "serverless-todo-app",
   "version": "1.0.0",
   "description": "Serverless TODO image app",
+  "scripts": {
+    "test": "mocha -r ts-node/register test/**/*.UnitTest.ts"
+  },
   "dependencies": {
     "@types/axios": "^0.14.0",
     "@types/http-errors": "^1.6.1",
@@ -21,9 +24,11 @@
     "@types/jsonwebtoken": "^8.3.2",
     "@types/elasticsearch": "^5.0.34",
     "@types/jest": "^24.0.15",
+    "@types/sinon": "^9.0.0",
     "@types/node": "^10.14.4",
     "aws-sdk": "^2.433.0",
     "jest": "^24.8.0",
+    "sinon": "^9.0.0",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-iam-roles-per-function": "^1.0.4",
     "serverless-plugin-canary-deployments": "^0.4.7",
@@ -32,8 +37,22 @@
     "serverless-webpack": "^5.2.0",
     "ts-loader": "^5.3.3",
     "typescript": "^3.4.1",
-    "webpack": "^4.29.6"
+    "webpack": "^4.29.6",
+    "@types/mocha": "^5.2.7",
+    "@types/chai": "^4.1.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "ts-node": "^8.3.0",
+    "ts-node-dev": "^1.0.0-pre.40"
   },
   "author": "Pravin Tripathi",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pravinyo/udacity-cloud-developer-capstone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pravinyo/udacity-cloud-developer-capstone/issues"
+  },
+  "homepage": "https://github.com/pravinyo/udacity-cloud-developer-capstone#readme"
 }
