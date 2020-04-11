@@ -7,8 +7,8 @@ node_js:
 
 branches:
     only:
-    - master
-    - dev
+        - master
+        - dev
       
 before_script:
   - npm ci
