@@ -9,6 +9,7 @@ plugins:
   - serverless-plugin-tracing
   - serverless-dynamodb-local
   - serverless-offline
+  - serverless-plugin-canary-deployments
 
 package:
   individually: true
@@ -29,6 +30,13 @@ provider:
     USER_ID_INDEX: UserIdIndex
     IMAGES_S3_BUCKET: serverless-todos-enhanced-pravin-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - codedeploy:*
+      Resource:
+        - '*'
 
 custom:
   topicName: todostopic-${self:provider.stage}
@@ -112,6 +120,11 @@ functions:
             description: Create a new Todo
             requestModels:
               'application/json': TodoRequestCreate
+
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: Live
+
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -135,6 +148,9 @@ functions:
             description: Update existing todo and save the modified one
             requestModels:
               'application/json': TodoRequestUpdate
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: Live
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -156,7 +172,9 @@ functions:
           documentation:
             summary: delete existing todo
             description: delete existing todo
-
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: Live
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -233,7 +251,11 @@ functions:
             description: Query todos based on startwith logic
             requestModels:
               'application/json': TodoRequestSearch
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: Live
 
+      
 resources:
   Resources:
     GatewayResponseDefault4XX:
