@@ -7,8 +7,9 @@ import { parseUserId } from '../auth/utils'
 import { TodoDeleteResponse } from '../models/TodoDeleteResponse'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { TodoUpdateResponse } from '../models/TodoUpdateResponse'
+import { createDynamoDBClient } from '../data/createDynamoDBClient'
 
-const todoAccess = new TodosAccess()
+const todoAccess = new TodosAccess(createDynamoDBClient())
 const bucketName = process.env.IMAGES_S3_BUCKET
 
  /**
