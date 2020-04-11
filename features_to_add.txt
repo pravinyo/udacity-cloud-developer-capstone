@@ -5,7 +5,6 @@ TODO: Website Hosting EC2 (If required)
 TODO: Metrics (Calls and speed param and geo param)
 TODO: Reminder feature SNS (When todo completed mail for progress)
 TODO: Blue/Green Deployment
-TODO: Offline Support (optional)
 TODO: CloudWatch Event to ElasticSearch (flow)
 TODO: s3 Event notification (event when new Image is been stored)
 TODO: Database Stream for new entry -> email (flow)
