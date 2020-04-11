@@ -1,18 +1,14 @@
-import * as elasticsearch from 'elasticsearch'
-import * as httpAwsEs from 'http-aws-es'
-
 import { createLogger } from '../utils/logger'
 import { LogNewTodoEventInES } from '../requests/LogNewTodoEventInES'
-//import { ElasticSearchLogCategory } from '../models/ElasticSearchLogCategory'
+import { createElasticSearchClient } from './createElasticSearchClient'
+import { ElasticSearchLogCategory } from '../models/ElasticSearchLogCategory'
 
 const logger = createLogger('esLogger')
-const esHost = process.env.ES_ENDPOINT
 
 export class ESAccess {
 
     constructor(
-      private readonly es = new elasticsearch.Client({
-        hosts: [ esHost ],connectionClass: httpAwsEs})) {
+      private readonly es = createElasticSearchClient()) {
     }
   
     /**
@@ -63,7 +59,7 @@ export class ESAccess {
       logger.info("Query for new todo list:",param)
 
       return await this.es.search({
-        index: 'todos-index',
+        index: ElasticSearchLogCategory.NEW_TODO,
         type: 'todos',
         body:{
           "query": param
@@ -95,7 +91,7 @@ export class ESAccess {
       logger.info("Query for completed todo list:",param)
     
       return await this.es.search({
-        index: 'done-index',
+        index: ElasticSearchLogCategory.DONE_TODO,
         type: 'todos',
         body:{
           "query": param
