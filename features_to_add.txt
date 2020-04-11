@@ -22,4 +22,3 @@ TODO: API Stages atleast 2 Stages (prod and dev)
 -TODO: Canary Deployment
 
 TODO: Sorting feature
-© 2020 GitHub, Inc.
