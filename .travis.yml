@@ -4,12 +4,7 @@ node_js:
     - 'node'
     - '12'
     - '16'
-
-branches:
-    only:
-        - master
-        - dev
-      
+    
 before_script:
   - npm ci
 
