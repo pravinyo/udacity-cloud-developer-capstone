@@ -1,0 +1,33 @@
+
+name: Unit testing Backend Domain Logic
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Install dependencies
+      working-directory: ${{env.working-dir-backend}}
+      run: cd ./backend && npm install
+      
+    - name: Run Unit Test
+      working-directory: ${{env.working-dir-backend}}
+      run: |
+        npm run test
+      
+      env:
+        CI: true
+        working-dir-backend : ./backend
+        working-dir-frontend: ./client
