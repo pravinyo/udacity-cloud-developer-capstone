@@ -198,7 +198,7 @@ functions:
   QueryTodo:
     environment:
       ES_ENDPOINT: !GetAtt TodoSearch.DomainEndpoint
-    handler: src/lambda/elasticSearch/searchTodo.handler
+    handler: src/lambda/http/searchTodo.handler
     events:
       - http:
           method: post
