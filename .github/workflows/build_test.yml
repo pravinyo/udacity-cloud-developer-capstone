@@ -18,7 +18,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install
+        working-directory: ${{env.working-dir-backend}}
+    - run: npm ci
       working-directory: ${{env.working-dir-backend}}
     - run: npm run test
       working-directory: ${{env.working-dir-backend}}
