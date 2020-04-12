@@ -1,0 +1,46 @@
+
+name: Deploy Master Branch to Production
+
+on: [push]
+#on:
+#    push:
+#      branches:
+#        - master
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Install dependencies
+      working-directory: ${{env.working-dir-backend}}
+      run: cd ./backend && npm install
+      
+    - name: Run Unit Test
+      working-directory: ${{env.working-dir-backend}}
+      run: |
+        npm run test
+
+    - name: Serverless Deploy
+      working-directory: ${{env.working-dir-backend}}
+      run: |
+        npm install -g serverless && sls deploy -v
+      
+      env:
+        CI: true
+        working-dir-backend : ./backend
+        working-dir-frontend: ./client
+        # using AWS creds directly for deployment
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
