@@ -5,7 +5,7 @@ name: Deploy Master Branch to Production
 on:
     push:
       branches:
-        - master
+        - getTodo_pagination
 
 jobs:
   deploy:
