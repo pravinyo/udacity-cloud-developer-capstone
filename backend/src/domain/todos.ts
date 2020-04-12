@@ -7,6 +7,7 @@ import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { TodoUpdateResponse } from '../models/TodoUpdateResponse'
 import { TodoInteractor } from '../interactor/todosInteractor'
 import { createDynamoDBClient } from '../data/dependencyInjector'
+import { GetAllTodoResponse } from "../models/GetAllTodoResponse"
 
 const bucketName = process.env.IMAGES_S3_BUCKET
 const todoInteractor = new TodoInteractor(new TodosAccess(createDynamoDBClient()),bucketName)
@@ -18,8 +19,8 @@ const todoInteractor = new TodoInteractor(new TodosAccess(createDynamoDBClient()
    * 
    * @returns Array list of todos 
    */
-export async function getAllTodos(jwtToken: string): Promise<TodoItem[]> {
-  return todoInteractor.getAllTodos(jwtToken)
+export async function getAllTodos(jwtToken: string,limit:number,nextKey:any): Promise<GetAllTodoResponse> {
+  return todoInteractor.getAllTodos(jwtToken,limit,nextKey)
 }
 
  /**

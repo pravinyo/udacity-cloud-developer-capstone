@@ -6,6 +6,7 @@ import { TodoUpdateResponse } from '../models/TodoUpdateResponse'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { createLogger } from '../utils/logger'
 import { ITodoAccess } from '../domain/ITodoAccess'
+import { GetAllTodoResponse } from '../models/GetAllTodoResponse'
 
 const logger = createLogger('todoAccess')
 
@@ -23,7 +24,7 @@ export class TodosAccess implements ITodoAccess {
    *
    * @returns Array list of TodoItem for userId
    */
-  async getAllTodos(userId:string): Promise<TodoItem[]> {
+  async getAllTodos(userId:string,limit:number,nextKey:any): Promise<GetAllTodoResponse> {
     logger.info('Getting all Todos for: ', userId)
 
     const result = await this.docClient.query({
@@ -32,11 +33,12 @@ export class TodosAccess implements ITodoAccess {
       KeyConditionExpression: 'userId = :userId',
       ExpressionAttributeValues:{
           ':userId':userId
-      }
+      },
+      Limit: limit,
+      ExclusiveStartKey: nextKey
     }).promise()
 
-    const items = result.Items
-    return items as TodoItem[]
+    return { items:result.Items,lastEvaluatedKey:result.LastEvaluatedKey} as GetAllTodoResponse
   }
 
   /**

@@ -1,5 +1,5 @@
 -TODO: CI Integeration setup 
-TODO: After CI success run CD with AWS credentials (CD)
+-TODO: After CI success run CD with AWS credentials (CD)
 -TODO: Testing (Unit and Integeration)
 
 -TODO: Elastic Search(For Logs storage)
@@ -10,15 +10,16 @@ TODO: CloudFront for website sharing
 TODO: Elastic BeanStack
 
 
-TODO: CloudWatch Event to ElasticSearch (flow) for errors and warnings
+-TODO: CloudWatch Event to ElasticSearch (flow) for errors and warnings
 
-TODO: Pagination Support (4 items at a time)
-TODO: Database Stream for new entry -> email (flow)
-TODO: Reminder feature SNS (When todo completed mail for progress)
-TODO: SQS
+-TODO: Pagination Support (4 items at a time)
+-TODO: Database Stream for new entry -> email (flow)
+-TODO: Reminder feature SNS (When todo completed mail for progress)
+-TODO: SNS
 
 TODO: Metrics (Calls and speed param and geo param)
 TODO: API Stages atleast 2 Stages (prod and dev)
 -TODO: Canary Deployment
 
 TODO: Sorting feature
+-TODO: Readme Update
