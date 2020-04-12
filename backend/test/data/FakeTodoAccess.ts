@@ -3,6 +3,7 @@ import { ITodoAccess } from "../../src/domain/ITodoAccess";
 import { TodoDeleteResponse } from "../../src/models/TodoDeleteResponse";
 import { UpdateTodoRequest } from "../../src/requests/UpdateTodoRequest";
 import { TodoUpdateResponse } from "../../src/models/TodoUpdateResponse";
+import { GetAllTodoResponse } from "../../src/models/GetAllTodoResponse";
 
 export class FakeTodoAccess implements ITodoAccess{
     queryResult = [{
@@ -15,14 +16,14 @@ export class FakeTodoAccess implements ITodoAccess{
         attachmentUrl: "http://pravin.com/sample.jpg"
     }]
 
-    getAllTodos(userId: string): Promise<TodoItem[]> {
+    getAllTodos(userId: string): Promise<GetAllTodoResponse> {
         
-        const returnAllTodos:Promise<TodoItem[]> = new Promise((resolve) => {
-            resolve(this.queryResult);
+        const returnAllTodos:Promise<GetAllTodoResponse> = new Promise((resolve) => {
+            resolve({items:this.queryResult,lastEvaluatedKey:undefined});
         });
 
-        const returnEmptyTodos:Promise<TodoItem[]> = new Promise((resolve) => {
-            resolve([] as TodoItem[]);
+        const returnEmptyTodos:Promise<GetAllTodoResponse> = new Promise((resolve) => {
+            resolve({items: [] as TodoItem[],lastEvaluatedKey:undefined});
         });
 
         if(userId == this.queryResult[0].userId)  return returnAllTodos
