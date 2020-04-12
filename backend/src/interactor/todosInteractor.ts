@@ -7,6 +7,7 @@ import { TodoDeleteResponse } from '../models/TodoDeleteResponse'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import { TodoUpdateResponse } from '../models/TodoUpdateResponse'
 import { ITodoAccess } from '../domain/ITodoAccess'
+import { GetAllTodoResponse } from '../models/GetAllTodoResponse'
 
 export class TodoInteractor{
   constructor(private readonly todoAccess:ITodoAccess,
@@ -19,11 +20,11 @@ export class TodoInteractor{
      * 
      * @returns Array list of todos 
      */
-    async getAllTodos(jwtToken: string): Promise<TodoItem[]> {
+    async getAllTodos(jwtToken: string,limit:number,nextKey:any): Promise<GetAllTodoResponse> {
 
       const userId = parseUserId(jwtToken)
 
-      return this.todoAccess.getAllTodos(userId)
+      return this.todoAccess.getAllTodos(userId,limit,nextKey)
     }
 
   /**
