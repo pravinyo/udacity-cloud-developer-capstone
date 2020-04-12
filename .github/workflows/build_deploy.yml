@@ -25,17 +25,27 @@ jobs:
         
     - name: Install dependencies
       working-directory: ${{env.working-dir-backend}}
-      run: cd ./backend && npm install
+      run: cd ./backend && npm install && npm install -g serverless
       
     - name: Run Unit Test
       working-directory: ${{env.working-dir-backend}}
       run: |
         cd ./backend && npm run test
 
+    - name: Serverless Plugin install
+        working-directory: ${{env.working-dir-backend}}
+        run: |
+            npm install serverless-offline --save-dev && npm install --save serverless-dynamodb-local && npm i --save-dev serverless-plugin-canary-deployments
+    
+    - name: Serverless configure for AWS
+        working-directory: ${{env.working-dir-backend}}
+        run: |
+            sls config credentials --provider aws --key ${{env.AWS_ACCESS_KEY_ID}} --secret ${{env.AWS_SECRET_ACCESS_KEY}} --profile serverless
+
     - name: Serverless Deploy
       working-directory: ${{env.working-dir-backend}}
       run: |
-        pwd && npm install -g serverless && sls deploy -v
+        export NODE_OPTIONS=--max_old_space_size=4096 && sls deploy -v --aws-profile serverless
       
       env:
         CI: true
