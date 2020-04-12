@@ -9,6 +9,7 @@ import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 
 import { isTodoExsts } from '../../domain/todos'
+import { extractToken } from '../../auth/utils'
 
 const XAWS = AWSXRay.captureAWS(AWS)
 
@@ -24,9 +25,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
   const todoId = event.pathParameters.todoId
 
   //Extract token
-  const authorization = event.headers.Authorization
-  const split = authorization.split(' ')
-  const jwtToken = split[1]
+  const jwtToken = extractToken(event.headers.Authorization)
 
   // Return a presigned URL to upload a file for a TODO item with the provided id
   const isExitsandAllowed = await isTodoExsts(todoId,jwtToken)
