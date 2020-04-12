@@ -1,0 +1,57 @@
+
+name: Deploy Master Branch to Production
+
+
+on:
+    push:
+      branches:
+        - master
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Install dependencies
+      working-directory: ${{env.working-dir-backend}}
+      run: cd ./backend && npm install && npm install -g serverless
+      
+    - name: Run Unit Test
+      working-directory: ${{env.working-dir-backend}}
+      run: |
+        cd ./backend && npm run test
+
+    - name: Serverless Plugin install
+      working-directory: ${{env.working-dir-backend}}
+      run: |
+        cd ./backend && npm install serverless-offline --save-dev && npm install --save serverless-dynamodb-local && npm i --save-dev serverless-plugin-canary-deployments
+    
+    - name: Serverless configure for AWS
+      shell: bash
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      working-directory: ${{env.working-dir-backend}}
+      run: |
+        sls config credentials --provider aws --key "$AWS_ACCESS_KEY_ID" --secret "$AWS_SECRET_ACCESS_KEY" --profile serverless
+
+    - name: Serverless Deploy
+      working-directory: ${{env.working-dir-backend}}
+      run: |
+        export NODE_OPTIONS=--max_old_space_size=4096 && sls deploy -v --aws-profile serverless
+      
+      env:
+        CI: true
+        working-dir-backend : ./backend
+        working-dir-frontend: ./client

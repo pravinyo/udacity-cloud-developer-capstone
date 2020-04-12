@@ -5,6 +5,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import { searchNewTodoInES, searchDoneTodoInES } from '../../domain/elasticSearch'
+import { SearchOnTodoType } from '../../models/SearchOnTodoType'
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   
@@ -19,9 +20,9 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
   console.log("Query is :",request.query)
   let results:any
 
-  if(request.on === "pending"){
+  if(request.on === SearchOnTodoType.PENDING){
     results = await searchNewTodoInES(request.query,jwtToken)
-  }else if(request.on ="done"){
+  }else if(request.on =SearchOnTodoType.DONE){
     results = await searchDoneTodoInES(request.query,jwtToken)
   }else{
     return {
@@ -32,10 +33,12 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     }
   }
 
+  const resturnRes = JSON.parse(JSON.stringify(results)).hits
+
   return {
     statusCode: 200,
     body: JSON.stringify({
-      results
+      resturnRes
     })
   }
 })

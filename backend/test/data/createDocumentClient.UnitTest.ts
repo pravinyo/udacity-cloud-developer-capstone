@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import 'mocha';
-import { createDynamoDBClient } from '../../src/data/createDynamoDBClient';
+import { createDynamoDBClient } from '../../src/data/dependencyInjector';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 

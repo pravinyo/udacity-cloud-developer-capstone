@@ -9,6 +9,7 @@ plugins:
   - serverless-plugin-tracing
   - serverless-dynamodb-local
   - serverless-offline
+  - serverless-plugin-canary-deployments
 
 package:
   individually: true
@@ -30,7 +31,17 @@ provider:
     IMAGES_S3_BUCKET: serverless-todos-enhanced-pravin-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - codedeploy:*
+      Resource:
+        - '*'
+
 custom:
+  topicName: todostopic-${self:provider.stage}
+  topicPublisher: sls-enhanced-todo-dev-SyncWithElasticsearch
+
   documentation:
     api:
       info:
@@ -109,6 +120,11 @@ functions:
             description: Create a new Todo
             requestModels:
               'application/json': TodoRequestCreate
+
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: Live
+
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -132,6 +148,9 @@ functions:
             description: Update existing todo and save the modified one
             requestModels:
               'application/json': TodoRequestUpdate
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: Live
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -153,7 +172,9 @@ functions:
           documentation:
             summary: delete existing todo
             description: delete existing todo
-
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: Live
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -189,12 +210,31 @@ functions:
   SyncWithElasticsearch:
     environment:
       ES_ENDPOINT: !GetAtt TodoSearch.DomainEndpoint
-    handler: src/lambda/dynamoDb/elasticSearchSync.handler
+      SNS_ARN:
+        Fn::Join:
+          - ':'
+          - - arn:aws:sns
+            - Ref: AWS::Region
+            - Ref: AWS::AccountId
+            - ${self:custom.topicName}
+      TOPIC_NAME: ${self:custom.topicName}
+    handler: src/lambda/dynamodb/elasticSearchSync.handler
     events:
       - stream:
           type: dynamodb
           arn: !GetAtt TodoDynamoDBTable.StreamArn
-  
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - sns:Publish
+        Resource: 
+          Fn::Join:
+            - ':'
+            - - arn:aws:sns
+              - Ref: AWS::Region
+              - Ref: AWS::AccountId
+              - ${self:custom.topicName}
+
   QueryTodo:
     environment:
       ES_ENDPOINT: !GetAtt TodoSearch.DomainEndpoint
@@ -211,7 +251,11 @@ functions:
             description: Query todos based on startwith logic
             requestModels:
               'application/json': TodoRequestSearch
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: Live
 
+      
 resources:
   Resources:
     GatewayResponseDefault4XX:
@@ -290,6 +334,30 @@ resources:
             Projection:
               ProjectionType: ALL
     
+    TodosTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: Todos channel topic
+        TopicName: ${self:custom.topicName}
+
+  #  SNSTopicPolicy:
+  #    Type: AWS::SNS::TopicPolicy
+  #    Properties:
+  #      PolicyDocument:
+  #        Version: "2012-10-17"
+  #        Statement:
+  #          - Effect: Allow
+  #            Principal:
+  #              AWS: "*"
+  #            Action: sns:Publish
+  #            Resource:
+  #              !Ref TodosTopic
+  #            Condition:
+  #              ArnLike:
+  #                AWS:SourceArn: arn:aws:lambda:::${self:custom.topicPublisher}
+  #      Topics:
+  #        - !Ref TodosTopic
+          
     # Uncomment if you want to create Elasticsearch
     TodoSearch:
       Type: AWS::Elasticsearch::Domain
