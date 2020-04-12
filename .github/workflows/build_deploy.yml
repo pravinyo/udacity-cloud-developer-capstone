@@ -49,7 +49,7 @@ jobs:
     - name: Serverless Deploy
       working-directory: ${{env.working-dir-backend}}
       run: |
-        cd ./backend && export NODE_OPTIONS=--max_old_space_size=4096 && sls deploy -v --aws-profile serverless
+        export NODE_OPTIONS=--max_old_space_size=4096 && sls deploy -v --aws-profile serverless
       
       env:
         CI: true
