@@ -21,6 +21,9 @@ The application should store TODO items, and each TODO item contains the followi
 It uses userId extracted from Authentication Token to manage todos
 
 # API Available from Backend:
+
+Please refer this [ReadMe Link](backend/README.md) for working of each lambda function.
+
 Following are the API/functions that are supported by the TODO application. Refer below for accessing API and parameter they accept and request type they expect and serve.
 
 * `CreateTodo` - create a new TODO for a current user. A shape of data send by a client application to this function can be found in the `CreateTodoRequest.ts` file.
@@ -113,13 +116,15 @@ It should return an empty body.
   ```
   API access endpoint: GET `https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos?limit={{limit}}&nextKey={{nextKey}}`
 
-* `SearchTodos` - returns a list of todos for userId matching `query` param. It serves request on POST method. It basically search the todo items in either `Pending` or `Done` Todos and this need to be specified in request body in `on` param. Request sent from Client Appliction looks like this:
+* `SearchTodos` - returns a list of todos for userId matching `query` param. It serves request on POST method. It basically search the todo items in either `Pending` or `done` Todos and this need to be specified in request body in `on` param. Request sent from Client Appliction looks like this:
   ```json
   {
     "query" : "report",
     "on": "done"
   }
   ```
+
+  `on` param accepts two value `Pending` and `done`.
 
   It should return a Array list of JSON object that matched the query param and here is the sample response:
 
