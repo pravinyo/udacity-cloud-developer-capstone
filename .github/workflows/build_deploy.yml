@@ -35,7 +35,7 @@ jobs:
     - name: Serverless Deploy
       working-directory: ${{env.working-dir-backend}}
       run: |
-        cd ./backend && npm install -g serverless && sls deploy -v
+        pwd && npm install -g serverless && sls deploy -v
       
       env:
         CI: true
