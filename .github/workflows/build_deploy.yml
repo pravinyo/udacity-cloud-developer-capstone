@@ -30,12 +30,12 @@ jobs:
     - name: Run Unit Test
       working-directory: ${{env.working-dir-backend}}
       run: |
-        npm run test
+        cd ./backend && npm run test
 
     - name: Serverless Deploy
       working-directory: ${{env.working-dir-backend}}
       run: |
-        npm install -g serverless && sls deploy -v
+        cd ./backend && npm install -g serverless && sls deploy -v
       
       env:
         CI: true
