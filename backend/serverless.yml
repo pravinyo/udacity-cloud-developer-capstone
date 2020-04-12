@@ -218,7 +218,7 @@ functions:
             - Ref: AWS::AccountId
             - ${self:custom.topicName}
       TOPIC_NAME: ${self:custom.topicName}
-    handler: src/lambda/dynamoDb/elasticSearchSync.handler
+    handler: src/lambda/dynamodb/elasticSearchSync.handler
     events:
       - stream:
           type: dynamodb
