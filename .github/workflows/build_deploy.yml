@@ -35,22 +35,23 @@ jobs:
     - name: Serverless Plugin install
       working-directory: ${{env.working-dir-backend}}
       run: |
-        npm install serverless-offline --save-dev && npm install --save serverless-dynamodb-local && npm i --save-dev serverless-plugin-canary-deployments
+        cd ./backend && npm install serverless-offline --save-dev && npm install --save serverless-dynamodb-local && npm i --save-dev serverless-plugin-canary-deployments
     
     - name: Serverless configure for AWS
+      shell: bash
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       working-directory: ${{env.working-dir-backend}}
       run: |
-        sls config credentials --provider aws --key ${{env.AWS_ACCESS_KEY_ID}} --secret ${{env.AWS_SECRET_ACCESS_KEY}} --profile serverless
+        sls config credentials --provider aws --key "$AWS_ACCESS_KEY_ID" --secret "$AWS_SECRET_ACCESS_KEY" --profile serverless
 
     - name: Serverless Deploy
       working-directory: ${{env.working-dir-backend}}
       run: |
-        export NODE_OPTIONS=--max_old_space_size=4096 && sls deploy -v --aws-profile serverless
+        cd ./backend && export NODE_OPTIONS=--max_old_space_size=4096 && sls deploy -v --aws-profile serverless
       
       env:
         CI: true
         working-dir-backend : ./backend
         working-dir-frontend: ./client
-        # using AWS creds directly for deployment
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
