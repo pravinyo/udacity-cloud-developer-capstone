@@ -10,9 +10,9 @@ TODO: CloudFront for website sharing
 TODO: Elastic BeanStack
 
 
-TODO: CloudWatch Event to ElasticSearch (flow) for errors and warnings
+-TODO: CloudWatch Event to ElasticSearch (flow) for errors and warnings
 
-TODO: Pagination Support (4 items at a time)
+-TODO: Pagination Support (4 items at a time)
 -TODO: Database Stream for new entry -> email (flow)
 -TODO: Reminder feature SNS (When todo completed mail for progress)
 -TODO: SNS
@@ -22,4 +22,4 @@ TODO: API Stages atleast 2 Stages (prod and dev)
 -TODO: Canary Deployment
 
 TODO: Sorting feature
-TODO: Readme Update
+-TODO: Readme Update
