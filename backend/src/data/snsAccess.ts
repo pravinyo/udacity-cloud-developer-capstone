@@ -29,7 +29,7 @@ export class SNSAccess {
             TopicArn: this.snsArn
         }
 
-        this.sns.publish(param)
+        this.sns.publish(param).promise()
         logger.info("Published done todo ",param)
     }
 
